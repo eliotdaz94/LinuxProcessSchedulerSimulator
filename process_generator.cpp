@@ -35,8 +35,8 @@ class Process {
 			int u_t;
 
 			// En caso de que consideremos el Real-Time Scheduler. El proceso puede ser de 
-			// tipo CFS con una probabilidad nice_probability o Real-Time con una probabilidad
-			// 1-nice_probability.
+			// tipo CFS con una probabilidad type_probability o Real-Time con una probabilidad
+			// 1-type_probability.
 			aux = dist(generator);
 			cout << "Aux type: " << aux << endl;
 			if (aux > type_probability * 10) {
@@ -68,7 +68,7 @@ class Process {
 				dist = uniform_int_distribution<int>(aux+1,life_time);
 				u_t = dist(generator);
 				aux += u_t;
-				requirements.push_back(Resource(u_t,));
+				//requirements.push_back(Resource(u_t,));
 				cout << " " << u_t << " ";
 			}
 			cout << endl;
