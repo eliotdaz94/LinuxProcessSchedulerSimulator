@@ -18,10 +18,9 @@ class RB_Node {
 			right = nullptr;
 		}
 
-		RB_Node(int k, int v, string c) {
+		RB_Node(int k, int v) {
 			key = k;
 			value = v;
-			color = c;
 			p = nullptr;
 			left = nullptr;
 			right = nullptr;	
@@ -34,8 +33,8 @@ class RB_Tree {
 		RB_Node *nil;
 
 		RB_Tree() {
-			root = nullptr;
 			nil = new RB_Node("BLACK");
+			root = nil;
 		}
 };
 
@@ -134,6 +133,42 @@ void insert_fixup(RB_Tree T, RB_Node *z) {
 	T.root->color = "BLACK";
 }
 
+void insert(RB_Tree T, RB_Node *z) {
+	RB_Node *x;
+	RB_Node *y;
+	y = T.nil;
+	x = T.root;
+	while (x != T.nil) {
+		y = x;
+		if (z->key < x->key) {
+			x = x->left;
+		}
+		else {
+			x = x->right;	
+		}
+	}
+	z->p = y;
+	if (y == T.nil) {
+		T.root = z;
+	}
+	else if (z->key < y->key) {
+		y->left = z;
+	}
+	else {
+		y->right = z;	
+	}
+	z->left = T.nil;
+	z->right = T.nil;
+	z->color = "RED";
+	insert_fixup(T,z);
+}
+
 int main(){
+	RB_Tree my_tree;
+	insert(my_tree, new RB_Node(1,11));
+	insert(my_tree, new RB_Node(2,12));
+	insert(my_tree, new RB_Node(3,13));
+	insert(my_tree, new RB_Node(4,14));
+	insert(my_tree, new RB_Node(5,15));
 	return 0;
 }
