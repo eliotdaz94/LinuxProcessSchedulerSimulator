@@ -1,6 +1,7 @@
 #include "rb_tree.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 RB_Tree::RB_Tree() {
 	this->nil = new RB_Node("BLACK");
@@ -108,12 +109,13 @@ void RB_Tree::insert_fixup(RB_Node *z) {
 }
 
 void RB_Tree::insert(RB_Node *z) {
-
+	std::cout << "Insertando: " << z->value << std::endl;
 	RB_Node *x;
 	RB_Node *y;
 	y = this->nil;
 	x = this->root;
 	while (x != this->nil) {
+		std::cout << "En el while." << std::endl;
 		y = x;
 		if (z->value < x->value) {
 			x = x->left;
@@ -124,6 +126,7 @@ void RB_Tree::insert(RB_Node *z) {
 	}
 	z->parent = y;
 	if (y == this->nil) {
+		std::cout << "Soy la raiz." << std::endl;;
 		this->root = z;
 	}
 	else if (z->value < y->value) {
@@ -136,12 +139,14 @@ void RB_Tree::insert(RB_Node *z) {
 	z->right = this->nil;
 	z->color = "RED";
 	insert_fixup(z);
+	/*
 	std::cout << "rb_tree.insert: "
 				<< z->value << " "
 				<< z->left->value << " "
 				<< z->right->value << " "
 				<< std::endl;
 	this->nodes = this->nodes + 1;
+	*/
 }
 
 void RB_Tree::transplant(RB_Node *u, RB_Node *v) {
@@ -259,4 +264,29 @@ RB_Node* RB_Tree::tree_minimum(RB_Node *x) {
 		y = y->left;
 	}
 	return y;
+}
+
+void RB_Tree::print_tree() {
+	std::vector<RB_Node*> children;
+	RB_Node *aux_node;
+	int power = 1;
+	int aux_power = 0;
+	children.push_back(this->root);
+	while (!children.empty()) {
+		aux_node = children.front();
+		if (aux_node->left != this->nil || aux_node->right != this->nil) {
+			children.push_back(aux_node->left);
+			children.push_back(aux_node->right);
+		}
+		std::cout << aux_node->value << " ";
+		//std::cout << aux_node->left->value << " ";
+		//std::cout << aux_node->right->value << " ";
+		aux_power += 1;
+		if (aux_power == power) {
+			std::cout << std::endl;
+			power *= 2;
+			aux_power = 0;
+		}
+		children.erase(children.begin());
+	}
 }

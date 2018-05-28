@@ -29,6 +29,8 @@ class RB_Tree {
 
 		RB_Node* tree_minimum(RB_Node *x);
 
+		void print_tree();
+
 };
 
 #endif
