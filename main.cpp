@@ -37,9 +37,13 @@ int main(){
 	RB_Tree* my_tree = new RB_Tree();
 	my_tree->insert(new RB_Node(1));
 	my_tree->insert(new RB_Node(2));
-	//my_tree->insert(new RB_Node(3));
-	//my_tree->insert(new RB_Node(4));
-	//my_tree->insert(new RB_Node(5));
+	my_tree->insert(new RB_Node(3));
+	my_tree->insert(new RB_Node(4));
+	my_tree->insert(new RB_Node(5));
+	my_tree->insert(new RB_Node(6));
+	my_tree->insert(new RB_Node(7));
+	my_tree->insert(new RB_Node(8));
+	my_tree->insert(new RB_Node(9));
 	//cout << "main: " << my_tree->nodes << endl;
 	my_tree->print_tree();
 

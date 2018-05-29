@@ -5,6 +5,8 @@
 
 RB_Tree::RB_Tree() {
 	this->nil = new RB_Node("BLACK");
+	//this->nil->left = this->nil;
+	//this->nil->right = this->nil;
 	this->root = this->nil;
 	this->nodes = 0;
 }
@@ -14,11 +16,11 @@ void RB_Tree::left_rotate(RB_Node *x) {
 	RB_Node *y;
 	y = x->right;
 	x->right = y->left;
-	if (y->left == this->nil) {
+	if (y->left != this->nil) {
 		y->left->parent = x;
 	}
 	y->parent = x->parent;
-	if (x->parent != this->nil) {
+	if (x->parent == this->nil) {
 		this->root = y;
 	}
 	else if (x == x->parent->left) {
@@ -57,7 +59,6 @@ void RB_Tree::insert_fixup(RB_Node *z) {
 
 	RB_Node *y;
 	while (z->parent->color == "RED") {
-		std::cout << "debug" << std::endl;
 		// Cuando mi padre es el hijo izquierdo de mi abuelo.
 		if (z->parent == z->parent->parent->left) {
 			y = z->parent->parent->right;
@@ -109,13 +110,11 @@ void RB_Tree::insert_fixup(RB_Node *z) {
 }
 
 void RB_Tree::insert(RB_Node *z) {
-	std::cout << "Insertando: " << z->value << std::endl;
 	RB_Node *x;
 	RB_Node *y;
 	y = this->nil;
 	x = this->root;
 	while (x != this->nil) {
-		std::cout << "En el while." << std::endl;
 		y = x;
 		if (z->value < x->value) {
 			x = x->left;
@@ -126,7 +125,6 @@ void RB_Tree::insert(RB_Node *z) {
 	}
 	z->parent = y;
 	if (y == this->nil) {
-		std::cout << "Soy la raiz." << std::endl;;
 		this->root = z;
 	}
 	else if (z->value < y->value) {
@@ -139,14 +137,6 @@ void RB_Tree::insert(RB_Node *z) {
 	z->right = this->nil;
 	z->color = "RED";
 	insert_fixup(z);
-	/*
-	std::cout << "rb_tree.insert: "
-				<< z->value << " "
-				<< z->left->value << " "
-				<< z->right->value << " "
-				<< std::endl;
-	this->nodes = this->nodes + 1;
-	*/
 }
 
 void RB_Tree::transplant(RB_Node *u, RB_Node *v) {
@@ -271,22 +261,24 @@ void RB_Tree::print_tree() {
 	RB_Node *aux_node;
 	int power = 1;
 	int aux_power = 0;
+	bool complete = false;
 	children.push_back(this->root);
-	while (!children.empty()) {
+	while (!children.empty() && !complete) {
 		aux_node = children.front();
-		if (aux_node->left != this->nil || aux_node->right != this->nil) {
+		std::cout << aux_node->value << " ";
+		if (aux_node->left !=  nullptr && aux_node->right != nullptr) {		
 			children.push_back(aux_node->left);
 			children.push_back(aux_node->right);
 		}
-		std::cout << aux_node->value << " ";
-		//std::cout << aux_node->left->value << " ";
-		//std::cout << aux_node->right->value << " ";
+		children.erase(children.begin());
 		aux_power += 1;
 		if (aux_power == power) {
 			std::cout << std::endl;
 			power *= 2;
 			aux_power = 0;
+			if (children.size() != power) {
+				complete = true;
+			}
 		}
-		children.erase(children.begin());
 	}
 }
