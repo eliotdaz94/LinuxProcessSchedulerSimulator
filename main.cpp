@@ -44,7 +44,6 @@ int main(){
 	my_tree->insert(new RB_Node(7));
 	my_tree->insert(new RB_Node(8));
 	my_tree->insert(new RB_Node(9));
-	//cout << "main: " << my_tree->nodes << endl;
 	my_tree->print_tree();
 
 	return(0);
