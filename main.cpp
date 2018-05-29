@@ -39,8 +39,12 @@ int main(){
 	my_tree->insert(new RB_Node(2));
 	my_tree->insert(new RB_Node(3));
 	my_tree->insert(new RB_Node(4));
-	my_tree->insert(new RB_Node(5));
+
+	RB_Node* node = new RB_Node(5);
+	my_tree->insert(node);
+	cout << "main: " << my_tree->nodes << endl;
 	
+	my_tree->remove(node);
 	cout << "main: " << my_tree->nodes << endl;
 
 	return(0);
