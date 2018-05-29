@@ -59,10 +59,6 @@ void RB_Tree::insert_fixup(RB_Node *z) {
 
 	RB_Node *y;
 	while (z->parent->color == "RED") {
-<<<<<<< HEAD
-=======
-		//std::cout << "debug" << std::endl;
->>>>>>> a35b69896832bcd7f19234b448bcb5bcaf7a6674
 		// Cuando mi padre es el hijo izquierdo de mi abuelo.
 		if (z->parent == z->parent->parent->left) {
 			y = z->parent->parent->right;
@@ -141,6 +137,7 @@ void RB_Tree::insert(RB_Node *z) {
 	z->right = this->nil;
 	z->color = "RED";
 	insert_fixup(z);
+	this->nodes = this->nodes + 1;
 }
 
 void RB_Tree::transplant(RB_Node *u, RB_Node *v) {
@@ -174,7 +171,7 @@ void RB_Tree::remove(RB_Node *z) {
 		RB_Tree::transplant(z, z->left);
 	}
 	else {
-		RB_Tree::tree_minimum(z->right);
+		y = RB_Tree::tree_minimum(z->right);
 		y_original_color = y->color;
 		x = y->right;
 		if (y->parent == z) {

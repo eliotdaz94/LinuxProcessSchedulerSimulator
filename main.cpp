@@ -40,11 +40,20 @@ int main(){
 	my_tree->insert(new RB_Node(3));
 	my_tree->insert(new RB_Node(4));
 	my_tree->insert(new RB_Node(5));
-	my_tree->insert(new RB_Node(6));
+
+	RB_Node* node = new RB_Node(6);
+	my_tree->insert(node);
+
 	my_tree->insert(new RB_Node(7));
 	my_tree->insert(new RB_Node(8));
 	my_tree->insert(new RB_Node(9));
 	my_tree->print_tree();
+	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
+
+	my_tree->remove(node);
+	my_tree->print_tree();
+	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
+	
 
 	return(0);
 }
