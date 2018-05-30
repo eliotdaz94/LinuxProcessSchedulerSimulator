@@ -3,17 +3,17 @@
 #include <string>
 #include <vector>
 
-RB_Tree::RB_Tree() {
-	this->nil = new RB_Node("BLACK");
+RedBlackTree::RedBlackTree() {
+	this->nil = new RedBlackNode("BLACK");
 	//this->nil->left = this->nil;
 	//this->nil->right = this->nil;
 	this->root = this->nil;
 	this->nodes = 0;
 }
 
-void RB_Tree::left_rotate(RB_Node *x) {
+void RedBlackTree::left_rotate(RedBlackNode *x) {
 
-	RB_Node *y;
+	RedBlackNode *y;
 	y = x->right;
 	x->right = y->left;
 	if (y->left != this->nil) {
@@ -33,9 +33,9 @@ void RB_Tree::left_rotate(RB_Node *x) {
 	x->parent = y;
 }
 
-void RB_Tree::right_rotate(RB_Node *x) {
+void RedBlackTree::right_rotate(RedBlackNode *x) {
 
-	RB_Node *y;
+	RedBlackNode *y;
 	y = x->left;
 	x->left = y->right;
 	if (y->right != this->nil) {
@@ -55,9 +55,9 @@ void RB_Tree::right_rotate(RB_Node *x) {
 	x->parent = y;
 }
 
-void RB_Tree::insert_fixup(RB_Node *z) {
+void RedBlackTree::insert_fixup(RedBlackNode *z) {
 
-	RB_Node *y;
+	RedBlackNode *y;
 	while (z->parent->color == "RED") {
 		// Cuando mi padre es el hijo izquierdo de mi abuelo.
 		if (z->parent == z->parent->parent->left) {
@@ -109,9 +109,9 @@ void RB_Tree::insert_fixup(RB_Node *z) {
 	this->root->color = "BLACK";
 }
 
-void RB_Tree::insert(RB_Node *z) {
-	RB_Node *x;
-	RB_Node *y;
+void RedBlackTree::insert(RedBlackNode *z) {
+	RedBlackNode *x;
+	RedBlackNode *y;
 	y = this->nil;
 	x = this->root;
 	while (x != this->nil) {
@@ -140,7 +140,7 @@ void RB_Tree::insert(RB_Node *z) {
 	this->nodes = this->nodes + 1;
 }
 
-void RB_Tree::transplant(RB_Node *u, RB_Node *v) {
+void RedBlackTree::transplant(RedBlackNode *u, RedBlackNode *v) {
 
 	if (u->parent == this->nil) {
 		this->root = v;
@@ -154,48 +154,48 @@ void RB_Tree::transplant(RB_Node *u, RB_Node *v) {
 	v->parent = u->parent;
 }
 
-void RB_Tree::remove(RB_Node *z) {
+void RedBlackTree::remove(RedBlackNode *z) {
 	
-	RB_Node *x;
-	RB_Node *y;
+	RedBlackNode *x;
+	RedBlackNode *y;
 	std::string y_original_color;
 
 	y = z;
 	y_original_color = y->color;
 	if (z->left == this->nil) {
 		x = z->right;
-		RB_Tree::transplant(z, z->right);
+		RedBlackTree::transplant(z, z->right);
 	}
 	else if (z->right == this->nil) {
 		x = z->left;
-		RB_Tree::transplant(z, z->left);
+		RedBlackTree::transplant(z, z->left);
 	}
 	else {
-		y = RB_Tree::tree_minimum(z->right);
+		y = RedBlackTree::tree_minimum(z->right);
 		y_original_color = y->color;
 		x = y->right;
 		if (y->parent == z) {
 			x->parent = y;
 		}
 		else {
-			RB_Tree::transplant(y, y->right);
+			RedBlackTree::transplant(y, y->right);
 			y->right = z->right;
 			y->right->parent = y;
 		}
-		RB_Tree::transplant(z, y);
+		RedBlackTree::transplant(z, y);
 		y->left = z->left;
 		y->left->parent = y;
 		y->color = z->color;
 	}
 	if (y_original_color == "BLACK") {
-		RB_Tree::remove_fixup(x);
+		RedBlackTree::remove_fixup(x);
 	}
 	this->nodes = this->nodes - 1;
 }
 
-void RB_Tree::remove_fixup(RB_Node *x) {
+void RedBlackTree::remove_fixup(RedBlackNode *x) {
 
-	RB_Node *w;
+	RedBlackNode *w;
 
 	while (x != this->root && x->color == "BLACK") {
 		if (x == x->parent->left) {
@@ -203,7 +203,7 @@ void RB_Tree::remove_fixup(RB_Node *x) {
 			if (w->color == "RED") {
 				w->color = "BLACK";
 				x->parent->color = "RED";
-				RB_Tree::left_rotate(x->parent);
+				RedBlackTree::left_rotate(x->parent);
 				w = x->parent->right; 
 			}
 			if (w->left->color == "BLACK" && w->right->color == "BLACK") {
@@ -213,13 +213,13 @@ void RB_Tree::remove_fixup(RB_Node *x) {
 			else if (w->right->color == "BLACK") {
 				w->left->color == "BLACK";
 				w->color == "BLACK";
-				RB_Tree::right_rotate(w);
+				RedBlackTree::right_rotate(w);
 				w = x->parent->right;
 			}
 			w->color = x->parent->color;
 			x->parent->color = "BLACK";
 			w->right->color = "BLACK";
-			RB_Tree::left_rotate(x->parent);
+			RedBlackTree::left_rotate(x->parent);
 			x = this->root;
 		}
 		else {
@@ -227,7 +227,7 @@ void RB_Tree::remove_fixup(RB_Node *x) {
 			if (w->color == "RED") {
 				w->color = "BLACK";
 				x->parent->color = "RED";
-				RB_Tree::left_rotate(x->parent);
+				RedBlackTree::left_rotate(x->parent);
 				w = x->parent->left; 
 			}
 			if (w->right->color == "BLACK" && w->left->color == "BLACK") {
@@ -237,22 +237,22 @@ void RB_Tree::remove_fixup(RB_Node *x) {
 			else if (w->left->color == "BLACK") {
 				w->right->color == "BLACK";
 				w->color == "BLACK";
-				RB_Tree::right_rotate(w);
+				RedBlackTree::right_rotate(w);
 				w = x->parent->left;
 			}
 			w->color = x->parent->color;
 			x->parent->color = "BLACK";
 			w->left->color = "BLACK";
-			RB_Tree::left_rotate(x->parent);
+			RedBlackTree::left_rotate(x->parent);
 			x = this->root;
 		}
 	}
 	x->color = "BLACK";
 }
 
-RB_Node* RB_Tree::tree_minimum(RB_Node *x) {
+RedBlackNode* RedBlackTree::tree_minimum(RedBlackNode *x) {
 
-	RB_Node *y = x;
+	RedBlackNode *y = x;
 
 	while (y->left != this->nil) {
 		y = y->left;
@@ -260,9 +260,9 @@ RB_Node* RB_Tree::tree_minimum(RB_Node *x) {
 	return y;
 }
 
-void RB_Tree::print_tree() {
-	std::vector<RB_Node*> children;
-	RB_Node *aux_node;
+void RedBlackTree::print_tree() {
+	std::vector<RedBlackNode*> children;
+	RedBlackNode *aux_node;
 	int power = 1;
 	int aux_power = 0;
 	bool complete = false;

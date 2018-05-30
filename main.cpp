@@ -34,19 +34,19 @@ int main() {
 }
 */
 int main(){
-	RB_Tree* my_tree = new RB_Tree();
-	my_tree->insert(new RB_Node(1));
-	my_tree->insert(new RB_Node(2));
-	my_tree->insert(new RB_Node(3));
-	my_tree->insert(new RB_Node(4));
-	my_tree->insert(new RB_Node(5));
+	RedBlackTree* my_tree = new RedBlackTree();
+	my_tree->insert(new RedBlackNode(1));
+	my_tree->insert(new RedBlackNode(2));
+	my_tree->insert(new RedBlackNode(3));
+	my_tree->insert(new RedBlackNode(4));
+	my_tree->insert(new RedBlackNode(5));
 
-	RB_Node* node = new RB_Node(6);
+	RedBlackNode* node = new RedBlackNode(6);
 	my_tree->insert(node);
 
-	my_tree->insert(new RB_Node(7));
-	my_tree->insert(new RB_Node(8));
-	my_tree->insert(new RB_Node(9));
+	my_tree->insert(new RedBlackNode(7));
+	my_tree->insert(new RedBlackNode(8));
+	my_tree->insert(new RedBlackNode(9));
 	my_tree->print_tree();
 	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
 

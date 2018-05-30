@@ -3,31 +3,31 @@
 
 #include "rb_node.h"
 
-class RB_Tree {
+class RedBlackTree {
 	
 	public:
 		
-		RB_Node *root;
-		RB_Node *nil;
+		RedBlackNode *root;
+		RedBlackNode *nil;
 		int nodes;
 
-		RB_Tree();
+		RedBlackTree();
 		
-		void left_rotate(RB_Node *x);
+		void left_rotate(RedBlackNode *x);
 
-		void right_rotate(RB_Node *x);
+		void right_rotate(RedBlackNode *x);
 
-		void insert_fixup(RB_Node *z);
+		void insert_fixup(RedBlackNode *z);
 
-		void insert(RB_Node *z);
+		void insert(RedBlackNode *z);
 
-		void transplant(RB_Node *u, RB_Node *v);
+		void transplant(RedBlackNode *u, RedBlackNode *v);
 
-		void remove(RB_Node *z);
+		void remove(RedBlackNode *z);
 
-		void remove_fixup(RB_Node *x);
+		void remove_fixup(RedBlackNode *x);
 
-		RB_Node* tree_minimum(RB_Node *x);
+		RedBlackNode* tree_minimum(RedBlackNode *x);
 
 		void print_tree();
 

@@ -3,21 +3,21 @@
 
 #include <string>
 
-class RB_Node {
+class RedBlackNode {
 	
 	public:
 		
 		int value;
 		std::string color;
-		RB_Node *left;
-		RB_Node *right;
-		RB_Node *parent;
+		RedBlackNode *left;
+		RedBlackNode *right;
+		RedBlackNode *parent;
 		
-		RB_Node(int value);
+		RedBlackNode(int value);
 
-		RB_Node(std::string color);
+		RedBlackNode(std::string color);
 		
-		RB_Node(int value, std::string color);
+		RedBlackNode(int value, std::string color);
 
 };
 
