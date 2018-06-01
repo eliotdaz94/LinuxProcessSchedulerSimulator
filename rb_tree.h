@@ -1,15 +1,18 @@
 #ifndef RB_TREE_H
 #define RB_TREE_H
 
+#include <mutex>
 #include "rb_node.h"
 
 class RedBlackTree {
 	
 	public:
-		
+
 		RedBlackNode *root;
 		RedBlackNode *nil;
 		int nodes;
+		std::mutex creator;  
+		std::mutex dispatcher;
 
 		RedBlackTree();
 		

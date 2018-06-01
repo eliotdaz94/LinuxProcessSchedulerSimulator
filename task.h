@@ -25,7 +25,7 @@ class Task {
 	const SchedClass *sched_class;
 	//struct sched_entity se;
 	SchedEntity se;
-	struct sched_rt_entity rt;
+	//struct sched_rt_entity rt;
 	int pid;
 	//pid_t pid;
 }
