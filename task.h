@@ -2,7 +2,8 @@
 #define TASK_H
 
 #include "sched_entity.h"
-#include "sched_class.h"
+
+class SchedClass;
 
 /*
 class Process {
@@ -28,6 +29,6 @@ class Task {
 	//struct sched_rt_entity rt;
 	int pid;
 	//pid_t pid;
-}
+};
 
 #endif

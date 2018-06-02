@@ -2,10 +2,9 @@
 #define SCHED_ENTITY_H
 
 #include "rb_node.h"
+#include "load_weight.h"
 
-class LoadWeight {
-	unsigned long weight, inv_weight;
-};
+class CFSRunQueue;
 
 class SchedEntity {
 	public:
@@ -28,7 +27,8 @@ class SchedEntity {
 		//#ifdef CONFIG_FAIR_GROUP_SCHED
 			//struct sched_entity	*parent;
 			/* rq on which this entity is (to be) queued: */
-			//struct cfs_rq		*cfs_rq;
+		//cfs_rq		*cfs_rq;
+		CFSRunQueue *cfs_rq;
 			/* rq "owned" by this entity/group: */
 			//struct cfs_rq		*my_q;
 		//#endif
