@@ -14,9 +14,7 @@ Resource::Resource(std::string t, int u_t) {
 	this->use_time = u_t;
 }
 
-Task::Task(){}
-
-Task::Task(int pid, int max_life_time, float nice_probability, 
+Task::Task(int pid, int max_lifetime, float nice_probability, 
 		   float policy_probability, float window_size) {
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -62,12 +60,12 @@ Task::Task(int pid, int max_life_time, float nice_probability,
 	this->cpus_allowed = 0;
 	this->pid = pid;
 	
-	dist = std::uniform_int_distribution<int>(1,max_life_time);
-	this->life_time = dist(generator);
-	upper_bound = (int)ceil(life_time * window_size);
+	dist = std::uniform_int_distribution<int>(1,max_lifetime);
+	this->lifetime = dist(generator);
+	upper_bound = (int)ceil(lifetime * window_size);
 	aux = 0;
 	is_io = false;
-	while (aux < life_time) {
+	while (aux < lifetime) {
 		std::cout << "Low bound " << (aux+1) << std::endl;
 		std::cout << "Upper bound " << upper_bound << std::endl;
 		dist = std::uniform_int_distribution<int>(aux+1,upper_bound);
@@ -83,8 +81,8 @@ Task::Task(int pid, int max_life_time, float nice_probability,
 		}
 		upper_bound += u_t-aux;
 		aux = u_t;
-		if (upper_bound > life_time){
-			upper_bound = life_time;
+		if (upper_bound > lifetime){
+			upper_bound = lifetime;
 		}
 	}
 	std::cout << std::endl;
@@ -92,7 +90,7 @@ Task::Task(int pid, int max_life_time, float nice_probability,
 	std::cout << "Tipo: " << policy << std::endl;
 	std::cout << "PID: " << pid << std::endl;
 	std::cout << "Nice value: " << nice_value << std::endl;
-	std::cout << "Life time value: " << life_time << std::endl;
+	std::cout << "Life time value: " << lifetime << std::endl;
 	//std::cout << "Runtime: " << v_runtime << std::endl;
 	std::cout << "Requirements: " << std::endl;
 	for(int i = 0; i < requirements.size(); i++) {

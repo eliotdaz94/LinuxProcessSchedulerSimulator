@@ -13,5 +13,6 @@ SchedEntity::SchedEntity() {
 	this->nr_migrations = 0;
 	this->start_runtime = 0;
 	this->avg_wakeup = 0;
+	this->my_task = nullptr;
 	this->cfs_rq = nullptr;
 }

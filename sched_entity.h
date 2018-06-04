@@ -5,6 +5,7 @@
 #include "load_weight.h"
 
 class CFSRunQueue;
+class Task;
 
 class SchedEntity {
 	public:
@@ -24,6 +25,7 @@ class SchedEntity {
 		long nr_migrations;
 		long start_runtime;
 		long avg_wakeup;
+		Task *my_task;
 		//#ifdef CONFIG_FAIR_GROUP_SCHED
 			//struct sched_entity	*parent;
 			/* rq on which this entity is (to be) queued: */

@@ -1,20 +1,30 @@
 #include "task.h"
 #include "policies.h"
+#include "fair_sched_class.h"
+#include "cfs_rq.h"
+#include "threshold.h"
 
 void task_generator(int max_life_time, float nice_probability, 
-					float policy_probability, float window_size) {
-	Task task_aux;
+					float policy_probability, float window_size,
+					FairSchedClass *fair_class, CFSRunQueue *cfs_rq, 
+					Threshold *thresh) {
+	Task *task_aux;
 	int pid = 0;
-	while(true) {
-		task_aux = Task(pid, max_life_time, nice_probability, 
+	int i = 0;
+	while(i < 5) {
+		task_aux = new Task(pid, max_life_time, nice_probability, 
 						policy_probability, window_size);
-		// Llamo al threshold. Si paso:
-		if (task_aux->policy == SCHED_NORMAL) {
-			task_aux->sched_class = &fair_class;
-			task_aux->se.cfs_rq = &cfs_rq;
+		if (thresh->under_threshold(task_aux->lifetime)) {
+			if (task_aux->policy == SCHED_NORMAL) {
+			//task_aux.sched_class = &fair_class;
+				task_aux->se.cfs_rq = cfs_rq;
+				task_aux->se.my_task = task_aux;
+			}
+		} 
+		else {
+			delete task_aux;
 		}
-		else 
-		
+		i++;		
 	}
 
 }

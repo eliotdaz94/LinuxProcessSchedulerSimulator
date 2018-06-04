@@ -45,13 +45,15 @@ class Task {
 		//pid_t pid;
 
 		// Miembros personalizados. 
-		long life_time;
+		long lifetime;
 		std::vector<Resource> requirements;
 
 		Task();
 
 		Task(int pid, int max_life_time, float nice_probability, 
 			 float policy_probability, float window_size);
+
+		//~Task();
 };
 
 #endif

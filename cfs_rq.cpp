@@ -12,4 +12,4 @@ CFSRunQueue::CFSRunQueue() {
 	this->h_load = 0;
 	this->shares = 0;
 	this->rq_weight = 0;
-};
+}
