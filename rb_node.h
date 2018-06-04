@@ -13,6 +13,8 @@ class RedBlackNode {
 		RedBlackNode *right;
 		RedBlackNode *parent;
 		
+		RedBlackNode();
+
 		RedBlackNode(int value);
 
 		RedBlackNode(std::string color);

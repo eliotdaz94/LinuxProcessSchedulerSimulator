@@ -8,6 +8,8 @@ class LoadWeight {
 		unsigned long weight, inv_weight;
 
 		LoadWeight();
+
+		LoadWeight(unsigned long w, unsigned long inv_w);
 };
 
 #endif

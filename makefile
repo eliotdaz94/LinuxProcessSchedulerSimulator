@@ -1,5 +1,5 @@
 main: main.cpp threshold.cpp
-	g++ main.cpp threshold.cpp rb_tree.cpp rb_node.cpp fair_sched_class.cpp -pthread -std=c++11 -o main.o -I -Wall
+	g++ main.cpp task.cpp threshold.cpp rb_tree.cpp rb_node.cpp sched_entity.cpp fair_sched_class.cpp load_weight.cpp -pthread -std=c++11 -o main.o -I -Wall
 
 run:
 	./main.o
