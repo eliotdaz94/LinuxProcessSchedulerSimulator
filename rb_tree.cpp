@@ -5,8 +5,6 @@
 
 RedBlackTree::RedBlackTree() {
 	this->nil = new RedBlackNode("BLACK");
-	//this->nil->left = this->nil;
-	//this->nil->right = this->nil;
 	this->root = this->nil;
 	this->nodes = 0;
 }
