@@ -7,18 +7,14 @@
 #include "prio.h"
 #include "sched_entity.h"
 #include "sched_class.h"
-
-//Scheduling policies
-#define SCHED_NORMAL	0
-#define SCHED_FIFO		1
-#define SCHED_RR		2
-#define SCHED_BATCH		3
-#define SCHED_IDLE		5
+#include "policies.h"
 
 Resource::Resource(std::string t, int u_t) {
 	this->type = t; 
 	this->use_time = u_t;
 }
+
+Task::Task(){}
 
 Task::Task(int pid, int max_life_time, float nice_probability, 
 		   float policy_probability, float window_size) {

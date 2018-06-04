@@ -1,6 +1,7 @@
 #ifndef CFS_RUN_QUEUE
 #define CFS_RUN_QUEUE
 
+#include <mutex>
 #include "rb_tree.h"
 #include "load_weight.h"
 
@@ -70,6 +71,9 @@ class CFSRunQueue {
 		unsigned long rq_weight;
 	//#endif
 	//#endif
+
+		std::mutex creator;  
+		std::mutex dispatcher;
 
 		CFSRunQueue();
 };

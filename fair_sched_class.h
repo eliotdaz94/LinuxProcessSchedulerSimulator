@@ -5,7 +5,7 @@
 #include "cfs_rq.h"
 #include "task.h"
 
-class FairSchedClass : public SchedClass {
+class FairSchedClass {
 	
 	public:
 
