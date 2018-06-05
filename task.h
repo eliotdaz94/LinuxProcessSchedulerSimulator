@@ -39,7 +39,7 @@ class Task {
 		unsigned int policy;
 		int cpus_allowed;
 		
-		bool affinity;
+		bool hard_affinity;
 
 		int pid;
 		//pid_t pid;

@@ -43,9 +43,10 @@
 #define TASK_USER_PRIO(p)	USER_PRIO((p)->static_prio)
 #define MAX_USER_PRIO		(USER_PRIO(MAX_PRIO))
 
+#define WEIGHT_IDLEPRIO   	3
+#define WMULT_IDLEPRIO		1431655765
 
-#define WEIGHT_IDLEPRIO                3
-#define WMULT_IDLEPRIO         1431655765
+#define NICE_0_LOAD			1024
 
 /*
  * Nice levels are multiplicative, with a gentle 10% change for every
@@ -102,22 +103,6 @@ static void set_load_weight(int static_prio, int policy, LoadWeight *load) {
 
 	load->weight = prio_to_weight[prio];
 	load->inv_weight = prio_to_wmult[prio];
-}
-
-/*
- * Convert nice value [19,-20] to rlimit style value [1,40].
- */
-static inline long nice_to_rlimit(long nice)
-{
-	return (MAX_NICE - nice + 1);
-}
-
-/*
- * Convert rlimit style value [1,40] to nice value [-20, 19].
- */
-static inline long rlimit_to_nice(long prio)
-{
-	return (MAX_NICE - prio + 1);
 }
 
 #endif /* _LINUX_SCHED_PRIO_H */

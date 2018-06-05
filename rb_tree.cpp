@@ -274,12 +274,6 @@ void RedBlackTree::print_tree() {
 		if (aux_node != this->nil) {
 			nodes_printed++;
 		}
-		/*
-		if (aux_node->left !=  nullptr && aux_node->right != nullptr) {		
-			children.push_back(aux_node->left);
-			children.push_back(aux_node->right);
-		}
-		*/
 		children.push_back(aux_node->left);
 		children.push_back(aux_node->right);
 		children.erase(children.begin());
