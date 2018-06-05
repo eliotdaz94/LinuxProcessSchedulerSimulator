@@ -15,7 +15,6 @@ void FairSchedClass::enqueue_task(Task *p, int wakeup, bool head) const {
 	 * through callig update_curr().
 	 */
 	//if (!(flags & ENQUEUE_WAKEUP) || (flags & ENQUEUE_MIGRATE))
-		se->vruntime += cfs_rq->min_vruntime;
 
 	/*
 	 * Update run-time statistics of the 'current'.
@@ -63,5 +62,3 @@ void FairSchedClass::dequeue_task(Task *p, int sleep) const {
 	//cfs_rq->tasks_timeline.delete(&se->run_node);
 	cfs_rq->tasks_timeline.insert(&se->run_node);
 }
-
-Task* FairSchedClass::pick_next_task(Task *p) const {}

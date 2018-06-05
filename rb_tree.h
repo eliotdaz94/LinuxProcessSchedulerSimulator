@@ -27,14 +27,15 @@ class RedBlackTree {
 
 		void remove_fixup(RedBlackNode *x);
 
-		RedBlackNode* tree_minimum(RedBlackNode *x);
+		RedBlackNode* tree_minimum();
+
+		RedBlackNode* _tree_minimum(RedBlackNode *x);
 
 		void print_tree();
 
-		void in_order();
-
 		void _in_order(RedBlackNode *curr);
 
+		void in_order();
 };
 
 #endif

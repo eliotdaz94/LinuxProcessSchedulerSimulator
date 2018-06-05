@@ -14,8 +14,6 @@ class FairSchedClass : public SchedClass {
 		void enqueue_task(Task *p, int wakeup, bool head) const;
 
 		void dequeue_task(Task *p, int sleep) const;
-		
-		Task* pick_next_task(Task *p) const;
 };
 
 #endif

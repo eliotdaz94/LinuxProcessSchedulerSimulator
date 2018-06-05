@@ -171,7 +171,7 @@ void RedBlackTree::remove(RedBlackNode *z) {
 		RedBlackTree::transplant(z, z->left);
 	}
 	else {
-		y = RedBlackTree::tree_minimum(z->right);
+		y = RedBlackTree::_tree_minimum(z->right);
 		y_original_color = y->color;
 		x = y->right;
 		if (y->parent == z) {
@@ -250,7 +250,7 @@ void RedBlackTree::remove_fixup(RedBlackNode *x) {
 	x->color = "BLACK";
 }
 
-RedBlackNode* RedBlackTree::tree_minimum(RedBlackNode *x) {
+RedBlackNode* RedBlackTree::_tree_minimum(RedBlackNode *x) {
 
 	RedBlackNode *y = x;
 
@@ -258,6 +258,10 @@ RedBlackNode* RedBlackTree::tree_minimum(RedBlackNode *x) {
 		y = y->left;
 	}
 	return y;
+}
+
+RedBlackNode* RedBlackTree::tree_minimum() {
+	return RedBlackTree::_tree_minimum(this->root);
 }
 
 void RedBlackTree::print_tree() {
@@ -289,16 +293,16 @@ void RedBlackTree::print_tree() {
 	}
 }
 
-void RedBlackTree::in_order() {
-	_in_order(this->root);
-	std::cout << std::endl;
-}
-
 void RedBlackTree::_in_order(RedBlackNode *curr) {
 	if (curr == this->nil) {
 		return;
 	}
-	_in_order(curr->left);
+	RedBlackTree::_in_order(curr->left);
 	std::cout << curr->value << " ";
-	_in_order(curr->right);
+	RedBlackTree::_in_order(curr->right);
+}
+
+void RedBlackTree::in_order() {
+	RedBlackTree::_in_order(this->root);
+	std::cout << std::endl;
 }

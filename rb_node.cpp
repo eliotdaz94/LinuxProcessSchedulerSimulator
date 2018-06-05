@@ -6,8 +6,8 @@ RedBlackNode::RedBlackNode(){
 	this->left = nullptr;
 	this->right = nullptr;
 	this->parent = nullptr;
+	this->my_entity = nullptr;
 }
-
 
 RedBlackNode::RedBlackNode(int value) {
 	this->value = value;
@@ -15,6 +15,7 @@ RedBlackNode::RedBlackNode(int value) {
 	this->left = nullptr;
 	this->right = nullptr;
 	this->parent = nullptr;
+	this->my_entity = nullptr;
 }
 
 RedBlackNode::RedBlackNode(std::string color) {
@@ -23,6 +24,7 @@ RedBlackNode::RedBlackNode(std::string color) {
 	this->left = nullptr;
 	this->right = nullptr;
 	this->parent = nullptr;
+	this->my_entity = nullptr;
 }
 
 RedBlackNode::RedBlackNode(int value, std::string color) {
@@ -31,4 +33,5 @@ RedBlackNode::RedBlackNode(int value, std::string color) {
 	this->left = nullptr;
 	this->right = nullptr;
 	this->parent = nullptr;
+	this->my_entity = nullptr;
 }

@@ -25,7 +25,6 @@ class SchedEntity {
 		long nr_migrations;
 		long start_runtime;
 		long avg_wakeup;
-		Task *my_task;
 		//#ifdef CONFIG_FAIR_GROUP_SCHED
 			//struct sched_entity	*parent;
 			/* rq on which this entity is (to be) queued: */
@@ -34,7 +33,8 @@ class SchedEntity {
 			/* rq "owned" by this entity/group: */
 			//struct cfs_rq		*my_q;
 		//#endif
-
+		Task *my_task;
+		
 		SchedEntity();
 };
 

@@ -58,6 +58,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	this->se = SchedEntity();
 	set_load_weight(this->static_prio, this->policy, &this->se.load);
 	this->cpus_allowed = 0;
+	this->hard_affinity = false;
 	this->pid = pid;
 	
 	dist = std::uniform_int_distribution<int>(1,max_lifetime);

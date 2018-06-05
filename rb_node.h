@@ -3,6 +3,8 @@
 
 #include <string>
 
+class SchedEntity;
+
 class RedBlackNode {
 	
 	public:
@@ -12,7 +14,8 @@ class RedBlackNode {
 		RedBlackNode *left;
 		RedBlackNode *right;
 		RedBlackNode *parent;
-		
+		SchedEntity *my_entity;
+
 		RedBlackNode();
 
 		RedBlackNode(int value);
