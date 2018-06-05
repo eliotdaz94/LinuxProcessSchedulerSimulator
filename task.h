@@ -23,7 +23,7 @@ class Task {
 	
 	public:
 
-		//volatile long state;	/* -1 unrunnable, 0 runnable, >0 stopped */
+		//volatile long state;	/* -1 unrunnable, 0 runnable, >0 finished */
 		int state;
 		int prio, static_prio, normal_prio;
 		unsigned int rt_priority;

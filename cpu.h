@@ -6,12 +6,13 @@
 class CPU {
 
 	public:
+		unsigned int time;
 		bool occupied;
 		Task *current;
 
 		CPU();
 
-		void consume_time(unsigned int time);
+		void consume_time();
 };
 
 #endif
