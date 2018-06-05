@@ -5,6 +5,8 @@
 
 RedBlackTree::RedBlackTree() {
 	this->nil = new RedBlackNode("BLACK");
+	this->nil->left = this->nil;
+	this->nil->right = this->nil;
 	this->root = this->nil;
 	this->nodes = 0;
 }
@@ -263,24 +265,46 @@ void RedBlackTree::print_tree() {
 	RedBlackNode *aux_node;
 	int power = 1;
 	int aux_power = 0;
+	int nodes_printed = 0;
 	bool complete = false;
 	children.push_back(this->root);
 	while (!children.empty() && !complete) {
 		aux_node = children.front();
 		std::cout << aux_node->value << " ";
+		if (aux_node != this->nil) {
+			nodes_printed++;
+		}
+		/*
 		if (aux_node->left !=  nullptr && aux_node->right != nullptr) {		
 			children.push_back(aux_node->left);
 			children.push_back(aux_node->right);
 		}
+		*/
+		children.push_back(aux_node->left);
+		children.push_back(aux_node->right);
 		children.erase(children.begin());
 		aux_power += 1;
 		if (aux_power == power) {
 			std::cout << std::endl;
 			power *= 2;
 			aux_power = 0;
-			if (children.size() != power) {
+			if (nodes_printed == this->nodes) {
 				complete = true;
 			}
 		}
 	}
+}
+
+void RedBlackTree::in_order() {
+	_in_order(this->root);
+	std::cout << std::endl;
+}
+
+void RedBlackTree::_in_order(RedBlackNode *curr) {
+	if (curr == this->nil) {
+		return;
+	}
+	_in_order(curr->left);
+	std::cout << curr->value << " ";
+	_in_order(curr->right);
 }

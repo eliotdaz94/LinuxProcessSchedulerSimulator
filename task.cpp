@@ -30,7 +30,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	// tipo CFS con una probabilidad type_probability o Real-Time con una probabilidad
 	// 1-type_probability.
 	aux = dist(generator);
-	std::cout << "Aux type: " << aux << std::endl;
+	//std::cout << "Aux type: " << aux << std::endl;
 	if (aux > policy_probability * 10) {
 		this->policy = SCHED_RR;
 	}
@@ -42,7 +42,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	// nice_probability o puede tener un valor distinto con probabilidad 
 	// 1-nice_probability.
 	aux = dist(generator);
-	std::cout << "Aux nice: " << aux << std::endl;
+	//std::cout << "Aux nice: " << aux << std::endl;
 	if (aux > nice_probability * 10) {
 		dist = std::uniform_int_distribution<int>(MIN_NICE,MAX_NICE);
 		nice_value = dist(generator);
@@ -66,11 +66,11 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	aux = 0;
 	is_io = false;
 	while (aux < lifetime) {
-		std::cout << "Low bound " << (aux+1) << std::endl;
-		std::cout << "Upper bound " << upper_bound << std::endl;
+		//std::cout << "Low bound " << (aux+1) << std::endl;
+		//std::cout << "Upper bound " << upper_bound << std::endl;
 		dist = std::uniform_int_distribution<int>(aux+1,upper_bound);
 		u_t = dist(generator);
-		std::cout << "u_t " << u_t << std::endl;
+		//std::cout << "u_t " << u_t << std::endl;
 		if (is_io) {
 			this->requirements.push_back(Resource("I/0",u_t-aux));
 			is_io = false;	

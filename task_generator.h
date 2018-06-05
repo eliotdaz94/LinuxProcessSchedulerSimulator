@@ -8,6 +8,6 @@
 void task_generator(int max_life_time, float nice_probability, 
 					float policy_probability, float window_size, 
 					FairSchedClass *fair_class, CFSRunQueue *cfs_rq,
-					Threshold *thresh);
+					Threshold *thresh, int *nr_task_gen);
 
 #endif

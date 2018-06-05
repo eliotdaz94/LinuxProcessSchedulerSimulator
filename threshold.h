@@ -12,6 +12,7 @@ class Threshold {
 		double initial_phase;
 		double offset;
 		double granularity;
+		bool exit;
 		std::mutex sync_threshold;
 
 		Threshold(double boundary, double amplitude, double initial_phase, double offset, double granularity);

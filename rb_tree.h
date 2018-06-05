@@ -31,6 +31,10 @@ class RedBlackTree {
 
 		void print_tree();
 
+		void in_order();
+
+		void _in_order(RedBlackNode *curr);
+
 };
 
 #endif

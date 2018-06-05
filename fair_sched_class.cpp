@@ -3,45 +3,13 @@
 #include "task.h"
 #include "sched_entity.h"
 
-/*
-static inline void update_load_add(struct load_weight *lw, unsigned long inc)
-{
-	lw->weight += inc;
-	lw->load->inv_weight = 0;
-}
-
-add_cfs_task_weight(struct cfs_rq *cfs_rq, unsigned long weight)
-{
-	cfs_rq->task_weight += weight;
-}
-
-account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
-{
-	//update_load_add(&cfs_rq->load, se->load.weight);
-	cfs_rq->load->weight += se->load.weight;
-	cfs_rq->load->inv_weight = 0;
-	
-	//if (!parent_entity(se))
-	//	inc_cpu_load(rq_of(cfs_rq), se->load.weight);
-	//if (entity_is_task(se)) {
-		
-		//add_cfs_task_weight(cfs_rq, se->load.weight);
-		cfs_rq->task_weight += se->load.weight;
-		
-		//list_add(&se->group_node, &cfs_rq->tasks);
-	//}
-	cfs_rq->nr_running++;
-	se->on_rq = 1;
-}
-*/
-
 FairSchedClass::FairSchedClass(){}
 
-void FairSchedClass::enqueue_task(CFSRunQueue *cfs_rq, Task *p, int wakeup, 
-								  bool head) {
+void FairSchedClass::enqueue_task(Task *p, int wakeup, bool head) const {
 	
 	//cfs_rq->creator
 	SchedEntity *se = &p->se;
+	CFSRunQueue *cfs_rq = p->se.cfs_rq;
 	/*
 	 * Update the normalized vruntime before updating min_vruntime
 	 * through callig update_curr().
@@ -73,8 +41,9 @@ void FairSchedClass::enqueue_task(CFSRunQueue *cfs_rq, Task *p, int wakeup,
 	cfs_rq->tasks_timeline.insert(&se->run_node);
 }
 
-void FairSchedClass::dequeue_task(CFSRunQueue *cfs_rq, Task *p, int sleep) {
+void FairSchedClass::dequeue_task(Task *p, int sleep) const {
 	SchedEntity *se = &p->se;
+	CFSRunQueue *cfs_rq = p->se.cfs_rq;
 	/*
 	 * Update the normalized vruntime before updating min_vruntime
 	 * through callig update_curr().
@@ -95,10 +64,4 @@ void FairSchedClass::dequeue_task(CFSRunQueue *cfs_rq, Task *p, int sleep) {
 	cfs_rq->tasks_timeline.insert(&se->run_node);
 }
 
-void FairSchedClass::yield_task(CFSRunQueue *cfs_rq){}
-
-void FairSchedClass::check_preempt_curr(CFSRunQueue *cfs_rq, Task *p, int flags){}
-
-Task* FairSchedClass::pick_next_task(CFSRunQueue *cfs_rq){}
-
-void FairSchedClass::put_prev_task(CFSRunQueue *cfs_rq, Task *p){}
+Task* FairSchedClass::pick_next_task(Task *p) const {}
