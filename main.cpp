@@ -28,22 +28,22 @@ int main(int argc, char *argv[]) {
 	int nr_task_gen = 0;
 	bool exit = false;
 	std::mutex write;
-	//std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq);
+	std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq, &exit, &write);
 	std::thread move(&Threshold::move_threshold, &thresh);
 	std::thread task_gen(task_generator, 1000, 0.8, 0.8, 0.3, &fair_class,
 						 &cfs_rq, &thresh, &nr_task_gen, &write);
 	task_gen.join();
-	std::cout << "Me canse de generar procesos." << std::endl;
-	std::cout << "Genere: " << nr_task_gen << std::endl;
+	write.lock();
+	std::cout << "### Se detiene generacion de tasks. ###" << std::endl;
+	std::cout << "### Se generaron un total de " << nr_task_gen << " tasks ###"<< std::endl;
+	write.unlock();
 	thresh.exit = true;
 	move.join();
-	std::cout << "Total nodes: " << cfs_rq.tasks_timeline.nodes << std::endl;
-	cfs_rq.tasks_timeline.print_tree();
-	cfs_rq.tasks_timeline.in_order();
-	std::cout << "Nodo mas izquierdo: " << cfs_rq.tasks_timeline.tree_minimum()->value << std::endl;
-	std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq, &exit, &write);
-	//std::this_thread::sleep_for(std::chrono::seconds(10));
-	std::cout << "Ya dormi" << std::endl;
+	//std::cout << "Total nodes: " << cfs_rq.tasks_timeline.nodes << std::endl;
+	//cfs_rq.tasks_timeline.print_tree();
+	//cfs_rq.tasks_timeline.in_order();
+	//std::cout << "Nodo mas izquierdo: " << cfs_rq.tasks_timeline.tree_minimum()->value << std::endl;
+	//std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq, &exit, &write);
 	exit = true;
 	dispat.join();
 	

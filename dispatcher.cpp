@@ -48,6 +48,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					prev_task->requirements.erase(prev_task->requirements.begin());
 					// No estoy seguro de esto.
 					prev_task->se.vruntime = 0;
+					prev_task->se.run_node.value = prev_task->se.vruntime;
 					if (prev_task->requirements.empty()) {
 						prev_task->state = 1;
 					}
@@ -57,11 +58,13 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 				}
 				else {
 					if (prev_task->se.load.weight == NICE_0_LOAD) {
-						prev_task->se.vruntime += cpus[i].time;	
+						prev_task->se.vruntime += cpus[i].time;
+						prev_task->se.run_node.value = prev_task->se.vruntime;	
 					}
 					else {
 						prev_task->se.vruntime += cpus[i].time * NICE_0_LOAD / 
 												  prev_task->se.load.weight;
+						prev_task->se.run_node.value = prev_task->se.vruntime;
 					}
 				}	
 				// El task se encola dependiendo de su estado.
@@ -130,8 +133,8 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 				}
 				//std::cout << "Times slice final: " << time_slice << std::endl;
 				// Se le asigna por afinidad el CPU.
-				cpus[i].time = (int)time_slice;
 				cpus[i].occupied = true;
+				cpus[i].time = (int)time_slice;
 				cpus[i].current = new_task;
 				std::thread processing(&CPU::consume_time, &cpus[i], i, write);
 				processing.detach();
