@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	Threshold thresh(500, 500, PI/2, 500, 1e-8);
 	int nr_task_gen = 0;
 
-	std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq);
+	//std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq);
 	std::thread move(&Threshold::move_threshold, &thresh);
 	std::thread task_gen(task_generator, 1000, 0.8, 0.8, 0.3, &fair_class,
 						 &cfs_rq, &thresh, &nr_task_gen);
@@ -39,12 +39,7 @@ int main(int argc, char *argv[]) {
 	cfs_rq.tasks_timeline.print_tree();
 	cfs_rq.tasks_timeline.in_order();
 	std::cout << "Nodo mas izquierdo: " << cfs_rq.tasks_timeline.tree_minimum()->value << std::endl;
-	/*
-	std::cout << "CPU[0]: " << cpus[0].occupied << std::endl;
-	std::cout << "CPU[1]: " << cpus[1].occupied << std::endl;
-	std::cout << "CPU[2]: " << cpus[2].occupied << std::endl;
-	std::cout << "CPU[3]: " << cpus[3].occupied << std::endl;
-	*/
+	std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq);
 	dispat.join();
 	
 	return 0;

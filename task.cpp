@@ -57,6 +57,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	this->sched_class = nullptr;
 	this->se = SchedEntity();
 	set_load_weight(this->static_prio, this->policy, &this->se.load);
+	this->se.run_node.my_entity = &this->se;
 	this->cpus_allowed = 0;
 	this->hard_affinity = false;
 	this->pid = pid;
@@ -91,6 +92,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	std::cout << "Tipo: " << policy << std::endl;
 	std::cout << "PID: " << pid << std::endl;
 	std::cout << "Nice value: " << nice_value << std::endl;
+	std::cout << "Weight: " << se.load.weight << std::endl;
 	std::cout << "Life time value: " << lifetime << std::endl;
 	//std::cout << "Runtime: " << v_runtime << std::endl;
 	std::cout << "Requirements: " << std::endl;

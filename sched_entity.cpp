@@ -3,7 +3,6 @@
 #include "rb_node.h"
 
 SchedEntity::SchedEntity() {
-	this->run_node.my_entity = this;
 	this->on_rq = 0;
 	this->exec_start = 0;
 	this->sum_exec_runtime = 0;
