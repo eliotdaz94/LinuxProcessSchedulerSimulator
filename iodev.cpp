@@ -17,10 +17,10 @@ void IODEV::consume_time(std::mutex *write) {
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
 	std::this_thread::sleep_for(std::chrono::milliseconds(this->time));
-	current->requirements[0].use_time -= this->time;
 	write->lock();
 	std::cout << "IODEV finaliza procesamiento de task con PID " 
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
 	this->occupied = false;
+	this->current->requirements.erase(this->current->requirements.begin());
 }

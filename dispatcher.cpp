@@ -25,7 +25,6 @@ bool check_iddle_cpus(CPU cpus[], int nr_cpus) {
 void io_dispatch(std::vector<Task*> *io_queue, IODEV *device, std::mutex *write, CFSRunQueue *cfs_rq){
 	while (true){
 		if (!device->occupied && device->current!=nullptr){
-			(device->current)->requirements.erase((device->current)->requirements.begin());
 			(device->current)->state = 0;
 			write->lock();
 			std::cout << "Task con PID " << (device->current)->pid 
@@ -34,7 +33,7 @@ void io_dispatch(std::vector<Task*> *io_queue, IODEV *device, std::mutex *write,
 			cfs_rq->dispatcher.lock();
 			(device->current)->sched_class->enqueue_task((device->current),0,0);
 			cfs_rq->dispatcher.unlock();
-
+			device->current=nullptr;
 		}
 		if ( io_queue->size() && !device->occupied){
 				device->occupied = true;
@@ -182,7 +181,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 			//std::cout << "Exit: " << exit << std::endl;
 			// Hay que tomar en cuenta que puede haber procesos en la cola I/O.
 			//std::cout << "Me han avisado que todo va de salida. Chequeare." << std::endl;
-			finished = check_iddle_cpus(cpus, nr_cpus) && !io_queue.size();
+			finished = check_iddle_cpus(cpus, nr_cpus) && io_queue.empty();
 			//std::cout << "Todos son CPUs ociosos: " << finished << std::endl;
 		}
 		i = (i+1) % nr_cpus;
