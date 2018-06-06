@@ -1,6 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <mutex>
 #include "task.h"
 
 class CPU {
@@ -12,7 +13,7 @@ class CPU {
 
 		CPU();
 
-		void consume_time();
+		void consume_time(int cpu, std::mutex *write);
 };
 
 #endif

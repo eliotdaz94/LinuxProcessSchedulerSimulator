@@ -50,6 +50,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 	else {
 		nice_value = 0;
 	}
+	this->state = 0;
 	this->prio = 0;
 	this->static_prio = NICE_TO_PRIO(nice_value);
 	this-> normal_prio = 0;
@@ -87,16 +88,7 @@ Task::Task(int pid, int max_lifetime, float nice_probability,
 			upper_bound = lifetime;
 		}
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 	//v_runtime = 0;
-	std::cout << "Tipo: " << policy << std::endl;
-	std::cout << "PID: " << pid << std::endl;
-	std::cout << "Nice value: " << nice_value << std::endl;
-	std::cout << "Weight: " << se.load.weight << std::endl;
-	std::cout << "Life time value: " << lifetime << std::endl;
-	//std::cout << "Runtime: " << v_runtime << std::endl;
-	std::cout << "Requirements: " << std::endl;
-	for(int i = 0; i < requirements.size(); i++) {
-		std::cout << "    " << requirements[i].type << " " << requirements[i].use_time << std::endl;
-	}
+	
 }
