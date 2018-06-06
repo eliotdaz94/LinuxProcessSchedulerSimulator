@@ -2,8 +2,10 @@
 #include <mutex>
 #include <cmath>
 #include <iostream>
+#include <vector>
 #include "dispatcher.h"
 #include "cpu.h"
+#include "iodev.h"
 #include "cfs_rq.h"
 #include "task.h"
 #include "sched_entity.h"
@@ -20,14 +22,48 @@ bool check_iddle_cpus(CPU cpus[], int nr_cpus) {
 	return all_iddle;
 }
 
+void io_dispatch(std::vector<Task*> *io_queue, IODEV *device, std::mutex *write, CFSRunQueue *cfs_rq){
+	while (true){
+		if (!device->occupied && device->current!=nullptr){
+			(device->current)->requirements.erase((device->current)->requirements.begin());
+			(device->current)->state = 0;
+			write->lock();
+			std::cout << "Task con PID " << (device->current)->pid 
+					  << " encolandose en arbol del CFS." << std::endl;
+			write->unlock();
+			cfs_rq->dispatcher.lock();
+			(device->current)->sched_class->enqueue_task((device->current),0,0);
+			cfs_rq->dispatcher.unlock();
+
+		}
+		if ( io_queue->size() && !device->occupied){
+				device->occupied = true;
+				device->time = (*io_queue->begin())->requirements[0].use_time;
+				device->current = (*io_queue->begin());
+				std::thread processing(&IODEV::consume_time, device, write);
+				processing.detach();
+				io_queue->erase(io_queue->begin());
+		}
+	}
+}
+
 void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit, 
 				std::mutex *write) {
+	
 	RedBlackNode *new_node;
 	SchedEntity *new_entity;
 	Task *new_task;
 	Task *prev_task;
+
+	std::vector<Task*> io_queue;
+
+	IODEV iodevice;
+	std::thread processingIO(&io_dispatch, &io_queue, &iodevice, write, cfs_rq);
+	processingIO.detach();
+
 	bool finished = false;
 	double time_slice;
+	
 	int i = 0;
 	int j = 0;
 	// Falta hacer que esto corra siempre.
@@ -86,6 +122,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					std::cout << "Task con PID " << prev_task->pid 
 							  << " encolandose en I/O." << std::endl;
 					write->unlock();
+					io_queue.push_back(prev_task);
 				}
 				else {
 					// Se elimina porque ha finalizado.
@@ -145,7 +182,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 			//std::cout << "Exit: " << exit << std::endl;
 			// Hay que tomar en cuenta que puede haber procesos en la cola I/O.
 			//std::cout << "Me han avisado que todo va de salida. Chequeare." << std::endl;
-			finished = check_iddle_cpus(cpus, nr_cpus);
+			finished = check_iddle_cpus(cpus, nr_cpus) && !io_queue.size();
 			//std::cout << "Todos son CPUs ociosos: " << finished << std::endl;
 		}
 		i = (i+1) % nr_cpus;
