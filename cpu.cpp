@@ -12,6 +12,7 @@ CPU::CPU() {
 }
 
 void CPU::consume_time(int cpu, std::mutex *write) {
+	this->use.lock();
 	write->lock();
 	std::cout << "CPU[" << cpu << "] procesando task con PID " 
 			  << this->current->pid << "." << std::endl;
@@ -23,4 +24,5 @@ void CPU::consume_time(int cpu, std::mutex *write) {
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
 	this->occupied = false;
+	this->use.unlock();
 }

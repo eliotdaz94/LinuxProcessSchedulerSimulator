@@ -10,6 +10,7 @@ class IODEV {
 		unsigned int time;
 		bool occupied;
 		Task *current;
+		std::mutex use;
 
 		IODEV();
 

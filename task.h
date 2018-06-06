@@ -17,6 +17,8 @@ class Resource {
 		Resource();
 		
 		Resource(std::string t, int u_t);
+
+		~Resource();
 };
 
 class Task {
