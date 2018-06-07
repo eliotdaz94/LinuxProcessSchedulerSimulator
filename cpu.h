@@ -8,9 +8,9 @@ class CPU {
 
 	public:
 		unsigned int time;
-		//bool occupied;
+		bool occupied;
 		Task *current;
-		std::mutex occupied;
+		std::mutex use;
 
 		CPU();
 

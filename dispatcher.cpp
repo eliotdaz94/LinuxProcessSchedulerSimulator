@@ -10,16 +10,11 @@
 #include "rb_node.h"
 #include "prio.h"
 
-
 bool check_iddle_cpus(CPU cpus[], int nr_cpus) {
 	bool all_iddle = true;
 	int i = 0;
 	while(i < nr_cpus && all_iddle) {
-		all_iddle = all_iddle && cpus[i].occupied.try_lock();
-		if(all_iddle) {
-			all_iddle = all_iddle && (cpus[i].current == nullptr);
-			cpus[i].occupied.unlock();
-		}
+		all_iddle = all_iddle && !cpus[i].occupied && cpus[i].current == nullptr;
 		i++;
 	}
 	return all_iddle;
@@ -35,7 +30,9 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 	double time_slice;
 	int i = 0;
 	while(!finished) {
-		if (cpus[i].occupied.try_lock()) {
+		//if (cpus[i].occupied.try_lock()) {
+		//if (cpus[i].use.try_lock() && !cpus[i].occupied) {
+		if (!cpus[i].occupied) {
 			// Si hay un task asociado al CPU, debo encolarlo dependiendo de su
 			// proxima rafaga.
 			if (cpus[i].current != nullptr) {
@@ -59,7 +56,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					std::cout << "Task con PID " << prev_task->pid 
 						  	  << " ha finalizado su ejecucion." << std::endl;
 					write->unlock();
-					delete prev_task;
+					//delete prev_task;
 				}
 				else {
 					// Si la rafaga actual es de tipo CPU, entonces el task 
@@ -69,11 +66,13 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 						prev_task->state = 0;
 						write->lock();
 						std::cout << "Task con PID " << prev_task->pid 
-								  << " encolandose en arbol del CFS." 
+								  << " encolandose en arbol del CFS: " 
+								  << prev_task->requirements[0].use_time  
 								  << std::endl;
 						write->unlock();
-						/* Lo siguiente que hace no es lo correcto */
-						delete prev_task;
+						cfs_rq->dispatcher.lock();
+						prev_task->sched_class->enqueue_task(prev_task,0,0);
+						cfs_rq->dispatcher.unlock();
 					}
 					// Si la rafaga actual es de tipo I/O, entonces el task 
 					// se bloquea y se encola en la cola para dispositivos I/O.
@@ -85,7 +84,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 								  << " encolandose en I/O." << std::endl;
 						write->unlock();
 						/* Lo siguiente que hace no es lo correcto */
-						delete prev_task;
+						//delete prev_task;
 					}
 				}
 				cpus[i].current = nullptr;
@@ -103,7 +102,9 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 				next_task->sched_class->dequeue_task(next_task,0);
 				write->lock();
 				std::cout << "Task con PID " << next_task->pid 
-						  << " desencolandose del arbol del CFS." << std::endl;
+						  << " desencolandose del arbol del CFS : " 
+						  << next_task->requirements[0].use_time
+						  << std::endl;
 				write->unlock();
 				cfs_rq->dispatcher.unlock();
 				// Se verifica que el time-slice sea valido:
@@ -117,7 +118,11 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					time_slice = next_task->requirements[0].use_time;	
 				}
 				// Se le asigna por afinidad el CPU.
+				write->lock();
+				std::cout << "Asignando CPU " << i << std::endl;
+				write->unlock();
 				cpus[i].time = (int)time_slice;
+				cpus[i].occupied = true;
 				cpus[i].current = next_task;
 				std::thread processing(&CPU::consume_time, &cpus[i], i, write);
 				processing.detach();
@@ -125,11 +130,17 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 			// Verificamos las condiciones de salida del dispatcher.
 			else {
 				cfs_rq->dispatcher.unlock();
-				finished = *exit && check_iddle_cpus;
+				//write->lock();
+				//std::cout << "Exit?: " << *exit << std::endl;
+				//write->unlock();
+				finished = *exit && check_iddle_cpus(cpus, nr_cpus);
+				//write->lock();
+				//std::cout << "Finalizo?: " << finished << std::endl;
+				//write->unlock();
 			}
 			//Lo ultimo que debo hacer es soltar el lock del CPU actual.
-			cpus[i].occupied.unlock();
+			//cpus[i].use.unlock();
 		}
-		i = (i + 1) % nr_cpus; 
+		i = (i + 1) % nr_cpus;
 	}
 }
