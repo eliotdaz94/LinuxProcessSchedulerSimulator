@@ -14,7 +14,7 @@ void task_generator(int max_life_time, float nice_probability,
 	Task *task_aux;
 	int pid = 0;
 	int i = 0; 
-	while(i < 100) {
+	while(i < 10) {
 		task_aux = new Task(i, max_life_time, nice_probability, 
 						policy_probability, window_size);
 		if (thresh->under_threshold(task_aux->lifetime)) {

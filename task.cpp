@@ -9,7 +9,7 @@
 #include "sched_class.h"
 #include "policies.h"
 
-Resource::~Resource(){};
+//Resource::~Resource(){};
 
 Resource::Resource(std::string t, int u_t) {
 	this->type = t; 

@@ -7,22 +7,27 @@
 
 CPU::CPU() {
 	this->time = 0;
-	this->occupied = false;
+	//this->occupied = false;
 	this->current = nullptr;
 }
 
 void CPU::consume_time(int cpu, std::mutex *write) {
-	this->use.lock();
+	this->occupied.lock();
 	write->lock();
 	std::cout << "CPU[" << cpu << "] procesando task con PID " 
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
 	std::this_thread::sleep_for(std::chrono::milliseconds(this->time));
-	current->requirements[0].use_time -= this->time;
+	if (current->requirements[0].use_time != this->time) {
+		current->requirements[0].use_time -= this->time;
+	}
+	else {
+		current->requirements.erase(current->requirements.begin());
+	}
 	write->lock();
 	std::cout << "CPU[" << cpu << "] finaliza procesamiento de task con PID " 
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
-	this->occupied = false;
-	this->use.unlock();
+	//this->occupied = false;
+	this->occupied.unlock();
 }
