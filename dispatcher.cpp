@@ -21,7 +21,16 @@ bool check_iddle_cpus(CPU cpus[], int nr_cpus) {
 	return all_iddle;
 }
 
-void dispatcher(CPU cpus[], int nr_cpus, IODev *io_dev, CFSRunQueue *cfs_rq, 
+bool check_iddle_io_dev(IODev *io_device) {
+	bool iddle;
+	io_device->use.lock();
+	iddle = !io_device->occupied && io_device->wait_queue.empty() 
+			&& io_device->current == nullptr;
+	io_device->use.unlock();
+	return iddle;
+}
+
+void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq, 
 				std::mutex *write, bool *exit) {
 	Task *prev_task;
 	Task *next_task;
@@ -82,8 +91,9 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_dev, CFSRunQueue *cfs_rq,
 						std::cout << "Task con PID " << prev_task->pid 
 								  << " encolandose en I/O." << std::endl;
 						write->unlock();
-						/* Lo siguiente que hace no es lo correcto */
-						//delete prev_task;
+						io_device->use.lock();
+						io_device->wait_queue.push_back(prev_task);
+						io_device->use.unlock();
 					}
 				}
 				cpus[i].current = nullptr;
@@ -126,9 +136,18 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_dev, CFSRunQueue *cfs_rq,
 			// Verificamos las condiciones de salida del dispatcher.
 			else {
 				cfs_rq->dispatcher.unlock();
-				finished = *exit && check_iddle_cpus(cpus, nr_cpus);
+				finished = *exit && check_iddle_cpus(cpus, nr_cpus) 
+						   && check_iddle_io_dev(io_device);
+				if (finished) {
+					cfs_rq->dispatcher.lock();
+					finished = (cfs_rq->nr_running == 0);
+					cfs_rq->dispatcher.unlock();
+				}
 			}
 		}
 		i = (i + 1) % nr_cpus;
 	}
+	write->lock();
+	std::cout << "Dispatcher terminando ejecucion." << std::endl;
+	write->unlock();
 }

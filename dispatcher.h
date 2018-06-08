@@ -5,7 +5,7 @@
 #include "cpu.h"
 #include "cfs_rq.h"
 
-void dispatcher(CPU cpus[], int nr_cpus, IODev *io_dev, CFSRunQueue *cfs_rq, 
+void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq, 
 				std::mutex *write, bool *exit);
 
 #endif

@@ -7,14 +7,14 @@
 #include "threshold.h"
 #include "prio.h"
 
-void task_generator(int max_life_time, float nice_probability, 
+void task_generator(int max_nr_tasks, int max_life_time, float nice_probability, 
 					float policy_probability, float window_size,
 					FairSchedClass *fair_class, CFSRunQueue *cfs_rq, 
 					Threshold *thresh, int *nr_task_gen, std::mutex *write) {
 	Task *task_aux;
 	int pid = 0;
 	int i = 0; 
-	while(i < 100) {
+	while(i < max_nr_tasks) {
 		task_aux = new Task(i, max_life_time, nice_probability, 
 						policy_probability, window_size);
 		if (thresh->under_threshold(task_aux->lifetime)) {

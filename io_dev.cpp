@@ -12,7 +12,6 @@ IODev::IODev() {
 }
 
 void IODev::consume_time(std::mutex *write) {
-	this->use.lock();
 	write->lock();
 	std::cout << "IODev procesando task con PID " 
 			  << this->current->pid << "." << std::endl;
@@ -24,5 +23,4 @@ void IODev::consume_time(std::mutex *write) {
 	write->unlock();
 	this->current->requirements.erase(this->current->requirements.begin());
 	this->occupied = false;
-	this->use.unlock();
 }
