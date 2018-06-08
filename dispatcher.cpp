@@ -30,8 +30,6 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 	double time_slice;
 	int i = 0;
 	while(!finished) {
-		//if (cpus[i].occupied.try_lock()) {
-		//if (cpus[i].use.try_lock() && !cpus[i].occupied) {
 		if (!cpus[i].occupied) {
 			// Si hay un task asociado al CPU, debo encolarlo dependiendo de su
 			// proxima rafaga.
@@ -92,38 +90,11 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 			cfs_rq->dispatcher.lock();
 			// Tomamos el siguiente nodo listo para ejecutarse, de existir.
 			if (cfs_rq->nr_running > 0) {
-				//write->lock();
-				//std::cout << "SIPEEE GUEY, SI HAY ALGUIEN" << std::endl;
-				//write->unlock();
 				next_node = cfs_rq->tasks_timeline.tree_minimum();
-				
-				if (next_node->value == -1) {
-					write->lock();
-					std::cout << "NODOS: " << cfs_rq->nr_running << std::endl;
-					std::cout << "NODOS: " << cfs_rq->tasks_timeline.nodes << std::endl;
-					std::cout << "NODO: " << next_node->value << std::endl;
-					//cfs_rq->tasks_timeline.print_tree();
-					write->unlock();
-				} 
-
 				next_entity = next_node->my_entity;
-				if (next_entity == nullptr) {
-					write->lock();
-					std::cout << "AYUUUUURAAA ENTIDAD" << std::endl;
-					write->unlock();
-				}
 				time_slice = (double)cfs_rq->target_latency *
 							 (double)next_entity->load.weight /
-							 (double)cfs_rq->load.weight;
-				//write->lock();
-				//std::cout << "CALCULE EL PIZZA SLICE" << std::endl;
-				//write->unlock();
-				if (next_entity == nullptr) {
-					//write->lock();
-					//std::cout << "AYUUUUURAAA ENTIDAD" << std::endl;
-					//write->unlock();
-				}
-				
+							 (double)cfs_rq->load.weight;				
 				next_task = next_entity->my_task;
 				// Se desencola del arbol.
 				next_task->sched_class->dequeue_task(next_task,0);
@@ -132,9 +103,6 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 						  << " desencolandose del arbol del CFS : " 
 						  << next_task->requirements[0].use_time
 						  << std::endl;
-				//cfs_rq->tasks_timeline.print_tree();
-				cfs_rq->tasks_timeline.in_order();
-				//cfs_rq->tasks_timeline.print_tree();
 				write->unlock();
 				cfs_rq->dispatcher.unlock();
 				// Se verifica que el time-slice sea valido:
@@ -148,10 +116,6 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					time_slice = next_task->requirements[0].use_time;	
 				}
 				// Se le asigna por afinidad el CPU.
-				//write->lock();
-				//std::cout << " PID " << next_task->pid <<" me sobra tiempo: " << next_task->requirements[0].use_time << std::endl;
-				//std::cout << "Y me asignan: " << time_slice << std::endl;
-				//write->unlock();
 				cpus[i].time = (int)time_slice;
 				cpus[i].occupied = true;
 				cpus[i].current = next_task;
@@ -160,20 +124,9 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 			}
 			// Verificamos las condiciones de salida del dispatcher.
 			else {
-				//write->lock();
-				//std::cout << "NOOOPE GUEY, NO HAY NADIE" << std::endl;
-				//write->unlock();
 				cfs_rq->dispatcher.unlock();
-				//write->lock();
-				//std::cout << "Exit?: " << *exit << std::endl;
-				//write->unlock();
 				finished = *exit && check_iddle_cpus(cpus, nr_cpus);
-				//write->lock();
-				//std::cout << "Finalizo?: " << finished << std::endl;
-				//write->unlock();
 			}
-			//Lo ultimo que debo hacer es soltar el lock del CPU actual.
-			//cpus[i].use.unlock();
 		}
 		i = (i + 1) % nr_cpus;
 	}

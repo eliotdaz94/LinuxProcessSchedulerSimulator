@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 	thresh.exit = true;
 	move.join();
 	//std::cout << "Total nodes: " << cfs_rq.tasks_timeline.nodes << std::endl;
-	cfs_rq.tasks_timeline.print_tree();
+	//cfs_rq.tasks_timeline.print_tree();
 	//cfs_rq.tasks_timeline.in_order();
 	//std::cout << "Nodo mas izquierdo: " << cfs_rq.tasks_timeline.tree_minimum()->value << std::endl;
 	//std::thread dispat(dispatcher, cpus, nr_cpus, &cfs_rq, &exit, &write);
@@ -50,22 +50,3 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-/*
-int main(){
-	RedBlackTree* my_tree = new RedBlackTree();
-	my_tree->insert(new RedBlackNode(11));
-	my_tree->insert(new RedBlackNode(2));
-	my_tree->insert(new RedBlackNode(14));
-	my_tree->insert(new RedBlackNode(1));
-	my_tree->insert(new RedBlackNode(7));
-	my_tree->insert(new RedBlackNode(5));
-	my_tree->insert(new RedBlackNode(8));
-	my_tree->insert(new RedBlackNode(15));
-	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
-	my_tree->print_tree();
-	my_tree->insert(new RedBlackNode(4));
-	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
-	my_tree->print_tree();
-	return 0;
-}
-*/

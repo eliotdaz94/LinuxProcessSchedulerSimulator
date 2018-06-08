@@ -75,3 +75,23 @@ int main(){
 	return 0;
 }
 */
+
+/*
+int main(){
+	RedBlackTree* my_tree = new RedBlackTree();
+	my_tree->insert(new RedBlackNode(11));
+	my_tree->insert(new RedBlackNode(2));
+	my_tree->insert(new RedBlackNode(14));
+	my_tree->insert(new RedBlackNode(1));
+	my_tree->insert(new RedBlackNode(7));
+	my_tree->insert(new RedBlackNode(5));
+	my_tree->insert(new RedBlackNode(8));
+	my_tree->insert(new RedBlackNode(15));
+	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
+	my_tree->print_tree();
+	my_tree->insert(new RedBlackNode(4));
+	std::cout << "Total nodes: " << my_tree->nodes << std::endl;
+	my_tree->print_tree();
+	return 0;
+}
+*
