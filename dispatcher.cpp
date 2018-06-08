@@ -135,14 +135,20 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq,
 			}
 			// Verificamos las condiciones de salida del dispatcher.
 			else {
-				cfs_rq->dispatcher.unlock();
+				//write->lock();
+				//std::cout << "Vamo a dormí ---------" << std::endl;
+				//write->unlock();
+				//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				finished = *exit && check_iddle_cpus(cpus, nr_cpus) 
 						   && check_iddle_io_dev(io_device);
 				if (finished) {
-					cfs_rq->dispatcher.lock();
-					finished = (cfs_rq->nr_running == 0);
-					cfs_rq->dispatcher.unlock();
+					//cfs_rq->dispatcher.lock();
+					//finished = (cfs_rq->nr_running == 0);
+					finished = (cfs_rq->nr_running == 0) && *exit && check_iddle_cpus(cpus, nr_cpus) 
+						   && check_iddle_io_dev(io_device);
+					//cfs_rq->dispatcher.unlock();
 				}
+				cfs_rq->dispatcher.unlock();
 			}
 		}
 		i = (i + 1) % nr_cpus;

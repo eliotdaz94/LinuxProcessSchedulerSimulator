@@ -55,4 +55,7 @@ void io_dispatch(IODev *io_device, CFSRunQueue *cfs_rq, std::mutex *write,
 			}
 		}
 	}
+	write->lock();
+	std::cout << "IO Dispatch terminando ejecucion." << std::endl;
+	write->unlock();
 }
