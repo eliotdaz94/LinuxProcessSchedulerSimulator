@@ -8,8 +8,8 @@ FairSchedClass::FairSchedClass(){}
 void FairSchedClass::enqueue_task(Task *p, int wakeup, bool head) const {
 	
 	//cfs_rq->creator
-	SchedEntity *se = &p->se;
-	CFSRunQueue *cfs_rq = p->se.cfs_rq;
+	SchedEntity *se = &(p->se);
+	CFSRunQueue *cfs_rq = se->cfs_rq;
 	/*
 	 * Update the normalized vruntime before updating min_vruntime
 	 * through callig update_curr().
@@ -37,12 +37,12 @@ void FairSchedClass::enqueue_task(Task *p, int wakeup, bool head) const {
 	//check_spread(cfs_rq, se);
 	//if (se != cfs_rq->curr)
 	//	__enqueue_entity(cfs_rq, se);
-	cfs_rq->tasks_timeline.insert(&se->run_node);
+	cfs_rq->tasks_timeline.insert(&(se->run_node));
 }
 
 void FairSchedClass::dequeue_task(Task *p, int sleep) const {
-	SchedEntity *se = &p->se;
-	CFSRunQueue *cfs_rq = p->se.cfs_rq;
+	SchedEntity *se = &(p->se);
+	CFSRunQueue *cfs_rq = se->cfs_rq;
 	/*
 	 * Update the normalized vruntime before updating min_vruntime
 	 * through callig update_curr().
@@ -59,5 +59,5 @@ void FairSchedClass::dequeue_task(Task *p, int sleep) const {
 	cfs_rq->task_weight -= se->load.weight;
 	cfs_rq->nr_running--;
 	se->on_rq = 0;
-	cfs_rq->tasks_timeline.remove(&se->run_node);
+	cfs_rq->tasks_timeline.remove(&(se->run_node));
 }

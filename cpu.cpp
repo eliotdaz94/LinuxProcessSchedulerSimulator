@@ -12,7 +12,7 @@ CPU::CPU() {
 }
 
 void CPU::consume_time(int cpu, std::mutex *write) {
-	this->use.lock();
+	//this->use.lock();
 	write->lock();
 	if (this->current == nullptr) {
 		std::cout << "AYUUUUURAAA" << std::endl;
@@ -24,6 +24,10 @@ void CPU::consume_time(int cpu, std::mutex *write) {
 	write->unlock();
 	std::this_thread::sleep_for(std::chrono::milliseconds(this->time));
 	if (current->requirements[0].use_time != this->time) {
+		//write->lock();
+		//std::cout << " PID " << this->current->pid <<" me sobra tiempo: " << current->requirements[0].use_time << std::endl;
+		//std::cout << "Y consumi: " << this->time << std::endl;
+		//write->unlock();
 		current->requirements[0].use_time -= this->time;
 	}
 	else {
@@ -34,5 +38,5 @@ void CPU::consume_time(int cpu, std::mutex *write) {
 			  << this->current->pid << "." << std::endl;
 	write->unlock();
 	this->occupied = false;
-	this->use.unlock();
+	//this->use.unlock();
 }
