@@ -227,7 +227,7 @@ void RedBlackTree::remove_fixup(RedBlackNode *x) {
 			if (w->color == "RED") {
 				w->color = "BLACK";
 				x->parent->color = "RED";
-				RedBlackTree::left_rotate(x->parent);
+				RedBlackTree::right_rotate(x->parent);
 				w = x->parent->left; 
 			}
 			if (w->right->color == "BLACK" && w->left->color == "BLACK") {
@@ -236,14 +236,14 @@ void RedBlackTree::remove_fixup(RedBlackNode *x) {
 			}
 			else if (w->left->color == "BLACK") {
 				w->right->color == "BLACK";
-				w->color == "BLACK";
-				RedBlackTree::right_rotate(w);
+				w->color == "RED";
+				RedBlackTree::left_rotate(w);
 				w = x->parent->left;
 			}
 			w->color = x->parent->color;
 			x->parent->color = "BLACK";
 			w->left->color = "BLACK";
-			RedBlackTree::left_rotate(x->parent);
+			RedBlackTree::right_rotate(x->parent);
 			x = this->root;
 		}
 	}
