@@ -14,7 +14,7 @@ void task_generator(int max_life_time, float nice_probability,
 	Task *task_aux;
 	int pid = 0;
 	int i = 0; 
-	while(i < 50) {
+	while(i < 100) {
 		task_aux = new Task(i, max_life_time, nice_probability, 
 						policy_probability, window_size);
 		if (thresh->under_threshold(task_aux->lifetime)) {
@@ -37,8 +37,10 @@ void task_generator(int max_life_time, float nice_probability,
 				task_aux->se.cfs_rq = cfs_rq;
 				task_aux->se.my_task = task_aux;
 				// Solo prueba */
-				task_aux->se.vruntime = task_aux->lifetime;
-				task_aux->se.run_node.value = task_aux->se.vruntime;
+				//task_aux->se.vruntime = task_aux->lifetime;
+				//task_aux->se.run_node.value = task_aux->se.vruntime;
+				task_aux->se.vruntime = 0;
+				task_aux->se.run_node.value = 0;
 				/* ----------- */
 				task_aux->se.cfs_rq->creator.lock();
 				task_aux->se.cfs_rq->dispatcher.lock();

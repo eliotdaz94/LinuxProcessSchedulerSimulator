@@ -12,7 +12,7 @@
 #include "dispatcher.h"
 
 #define PI 3.14159265
-/*
+
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
 		std::cout << "Usage: " << argv[0] << " nr_cpus " << std::endl;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-*/
+/*
 int main(){
 	RedBlackTree* my_tree = new RedBlackTree();
 	my_tree->insert(new RedBlackNode(11));
@@ -68,3 +68,4 @@ int main(){
 	my_tree->print_tree();
 	return 0;
 }
+*/

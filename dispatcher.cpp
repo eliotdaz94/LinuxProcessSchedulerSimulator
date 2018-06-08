@@ -102,7 +102,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					std::cout << "NODOS: " << cfs_rq->nr_running << std::endl;
 					std::cout << "NODOS: " << cfs_rq->tasks_timeline.nodes << std::endl;
 					std::cout << "NODO: " << next_node->value << std::endl;
-					cfs_rq->tasks_timeline.print_tree();
+					//cfs_rq->tasks_timeline.print_tree();
 					write->unlock();
 				} 
 
@@ -134,7 +134,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 						  << std::endl;
 				//cfs_rq->tasks_timeline.print_tree();
 				cfs_rq->tasks_timeline.in_order();
-				cfs_rq->tasks_timeline.print_tree();
+				//cfs_rq->tasks_timeline.print_tree();
 				write->unlock();
 				cfs_rq->dispatcher.unlock();
 				// Se verifica que el time-slice sea valido:
