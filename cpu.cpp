@@ -14,13 +14,8 @@ CPU::CPU() {
 void CPU::consume_time(int cpu, std::mutex *write) {
 	//this->use.lock();
 	write->lock();
-	if (this->current == nullptr) {
-		std::cout << "AYUUUUURAAA" << std::endl;
-	}
-	else {
 		std::cout << "CPU[" << cpu << "] procesando task con PID " 
-			  << this->current->pid << "." << std::endl;
-	}
+			 	  << this->current->pid << "." << std::endl;
 	write->unlock();
 	std::this_thread::sleep_for(std::chrono::milliseconds(this->time));
 	if (current->requirements[0].use_time != this->time) {

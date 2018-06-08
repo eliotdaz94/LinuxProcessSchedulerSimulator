@@ -49,10 +49,11 @@ int main(int argc, char *argv[]) {
 	thresh.exit = true;
 	move.join();
 	// Iniciamos el despachador de IO en un nuevo hilo.
-	std::thread io_dispat(io_dispatch, &io_dev, &cfs_rq, &write, &io_exit);
+	std::thread io_dispat(io_dispatch, &io_dev, &nr_task_gen, &cfs_rq, &write,
+	 					  &io_exit);
 	// Iniciamos el despachador de task en un nuevo hilo.
-	std::thread dispat(dispatcher, cpus, nr_cpus, &io_dev, &cfs_rq, &write,
-					   &exit);
+	std::thread dispat(dispatcher, cpus, nr_cpus, &nr_task_gen, &io_dev, 
+					   &cfs_rq, &write, &exit);
 	exit = true;
 	dispat.join();
 	io_exit = true;

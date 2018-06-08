@@ -7,8 +7,8 @@
 #include "cfs_rq.h"
 #include "fair_sched_class.h"
 
-void io_dispatch(IODev *io_device, CFSRunQueue *cfs_rq, std::mutex *write,
-				 bool *exit) {
+void io_dispatch(IODev *io_device, int *nr_task_gen, CFSRunQueue *cfs_rq,
+				 std::mutex *write, bool *exit) {
 	Task *prev_task;
 	Task *next_task;
 
@@ -24,6 +24,8 @@ void io_dispatch(IODev *io_device, CFSRunQueue *cfs_rq, std::mutex *write,
 					write->lock();
 					std::cout << "Task con PID " << prev_task->pid 
 						  	  << " ha finalizado su ejecucion." << std::endl;
+					*nr_task_gen = *nr_task_gen - 1;
+					std::cout << "------------> Numero de procesos aun vivos: " << *nr_task_gen << std::endl;
 					write->unlock();
 					delete prev_task;	
 				}
@@ -32,10 +34,10 @@ void io_dispatch(IODev *io_device, CFSRunQueue *cfs_rq, std::mutex *write,
 				//arbol del CFS. task.state = 0.
 				else {
 					prev_task->state = 0;
-					write->lock();
 					cfs_rq->dispatcher.lock();
 					prev_task->sched_class->enqueue_task(prev_task,0,0);
 					cfs_rq->dispatcher.unlock();
+					write->lock();
 					std::cout << "Task con PID " << prev_task->pid 
 							  << " encolandose en arbol del CFS." << std::endl;
 					write->unlock();

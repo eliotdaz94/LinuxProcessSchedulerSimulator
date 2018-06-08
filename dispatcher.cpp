@@ -30,8 +30,8 @@ bool check_iddle_io_dev(IODev *io_device) {
 	return iddle;
 }
 
-void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq, 
-				std::mutex *write, bool *exit) {
+void dispatcher(CPU cpus[], int nr_cpus, int *nr_task_gen, IODev *io_device,
+				CFSRunQueue *cfs_rq, std::mutex *write, bool *exit) {
 	Task *prev_task;
 	Task *next_task;
 	SchedEntity *next_entity;
@@ -63,8 +63,10 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq,
 					write->lock();
 					std::cout << "Task con PID " << prev_task->pid 
 						  	  << " ha finalizado su ejecucion." << std::endl;
+					*nr_task_gen = *nr_task_gen-1;
+					std::cout << "------------> Numero de procesos aun vivos: " << *nr_task_gen << std::endl;
 					write->unlock();
-					//delete prev_task;
+					delete prev_task;
 				}
 				else {
 					// Si la rafaga actual es de tipo CPU, entonces el task 
@@ -115,7 +117,6 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq,
 						  << next_task->requirements.front().use_time
 						  << std::endl;
 				write->unlock();
-				cfs_rq->dispatcher.unlock();
 				// Se verifica que el time-slice sea valido:
 				if (time_slice < cfs_rq->min_granularity) {
 					time_slice = cfs_rq->min_granularity;
@@ -135,10 +136,8 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq,
 			}
 			// Verificamos las condiciones de salida del dispatcher.
 			else {
-				//write->lock();
-				//std::cout << "Vamo a dormí ---------" << std::endl;
-				//write->unlock();
-				//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				//finished = *exit && (*nr_task_gen == 0);
+				
 				finished = *exit && check_iddle_cpus(cpus, nr_cpus) 
 						   && check_iddle_io_dev(io_device);
 				if (finished) {
@@ -148,8 +147,8 @@ void dispatcher(CPU cpus[], int nr_cpus, IODev *io_device, CFSRunQueue *cfs_rq,
 						   && check_iddle_io_dev(io_device);
 					//cfs_rq->dispatcher.unlock();
 				}
-				cfs_rq->dispatcher.unlock();
 			}
+			cfs_rq->dispatcher.unlock();
 		}
 		i = (i + 1) % nr_cpus;
 	}

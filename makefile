@@ -5,7 +5,7 @@ main: main.cpp
 		-pthread -std=c++11 -o main.o -I -Wall
 
 run:
-	./main.o 4 100
+	./main.o 4 1000
 
 rm:
 	rm *.o
