@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include "cpu.h"
+#include "io_dev.h"
 #include "cfs_rq.h"
 #include "task.h"
 #include "sched_entity.h"
@@ -20,8 +21,8 @@ bool check_iddle_cpus(CPU cpus[], int nr_cpus) {
 	return all_iddle;
 }
 
-void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit, 
-				std::mutex *write) {
+void dispatcher(CPU cpus[], int nr_cpus, IODev *io_dev, CFSRunQueue *cfs_rq, 
+				std::mutex *write, bool *exit) {
 	Task *prev_task;
 	Task *next_task;
 	SchedEntity *next_entity;
@@ -29,7 +30,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 	bool finished = false;
 	double time_slice;
 	int i = 0;
-	while(!finished) {
+	while (!finished) {
 		if (!cpus[i].occupied) {
 			// Si hay un task asociado al CPU, debo encolarlo dependiendo de su
 			// proxima rafaga.
@@ -60,12 +61,12 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 					// Si la rafaga actual es de tipo CPU, entonces el task 
 					// esta listo para ser ejecutado y se encola de nuevo en el
 					//arbol del CFS. task.state = 0.
-					if (prev_task->requirements[0].type == "CPU") {
+					if (prev_task->requirements.front().type == "CPU") {
 						prev_task->state = 0;
 						write->lock();
 						std::cout << "Task con PID " << prev_task->pid 
 								  << " encolandose en arbol del CFS: " 
-								  << prev_task->requirements[0].use_time  
+								  << prev_task->requirements.front().use_time  
 								  << std::endl;
 						write->unlock();
 						cfs_rq->dispatcher.lock();
@@ -101,7 +102,7 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 				write->lock();
 				std::cout << "Task con PID " << next_task->pid 
 						  << " desencolandose del arbol del CFS : " 
-						  << next_task->requirements[0].use_time
+						  << next_task->requirements.front().use_time
 						  << std::endl;
 				write->unlock();
 				cfs_rq->dispatcher.unlock();
@@ -112,8 +113,8 @@ void dispatcher(CPU cpus[], int nr_cpus, CFSRunQueue *cfs_rq, bool *exit,
 				else {
 					time_slice = round(time_slice);
 				}
-				if (next_task->requirements[0].use_time < time_slice) {
-					time_slice = next_task->requirements[0].use_time;	
+				if (next_task->requirements.front().use_time < time_slice) {
+					time_slice = next_task->requirements.front().use_time;	
 				}
 				// Se le asigna por afinidad el CPU.
 				cpus[i].time = (int)time_slice;
